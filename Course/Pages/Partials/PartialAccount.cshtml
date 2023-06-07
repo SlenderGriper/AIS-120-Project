@@ -1,0 +1,8 @@
+﻿@using System.Security.Claims;
+@if (User.Identity.IsAuthenticated)
+{
+    <a class="nav-link text-dark" asp-area="" asp-page="/AccountPage/AccountCookie">@User.FindFirst(ClaimTypes.Name).Value</a>
+}
+@if(!User.Identity.IsAuthenticated){
+    <a class="nav-link text-dark" asp-area="" asp-page="/Index">Вход</a>
+}

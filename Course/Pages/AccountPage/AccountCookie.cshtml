@@ -1,0 +1,14 @@
+﻿@page
+@using System.Security.Claims;
+@model Course.Pages.AccountCookieModel
+@{
+}
+<div class="jumbotron">
+    <p>@User.FindFirst(ClaimTypes.Role)?.Value</p>
+    <p>@User.FindFirst(ClaimTypes.Name)?.Value</p>
+    <form method="post">
+        <button type="submit" class="btn btn-primary btn-lg">Выйти</button>
+    </form>
+</div>
+
+

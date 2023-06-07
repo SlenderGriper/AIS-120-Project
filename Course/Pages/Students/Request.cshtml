@@ -1,0 +1,60 @@
+﻿@page
+@using Course.Model.Database.Enum;
+@model Course.Pages.StudentOpportunities.RequestModel
+@{
+}
+
+<h2 class="mb-3 text-center ">Добавить новое достижение</h2>
+<form method="post">
+    <div class="text-center">
+        <div class="row justify-content-around p-3 mb-3">
+        <div class="col mb-4">
+            <label asp-for="Input.AchievementType" class="form-label fs-2"></label>
+                <select asp-for="Input.AchievementType" asp-items="Html.GetEnumSelectList<AchiveType>()" class=" form-select text-center" id="type">
+            </select>
+        </div>
+            <div class="col mb-4">
+                <label asp-for="Input.Description" class="form-label fs-2"></label>
+                <textarea asp-for="Input.Description"  class="form-control"  rows="3"></textarea>
+            </div>
+        </div>
+        <div class="row mb-4 ">
+            <div class="col">
+                <p> Имя Студента 1 :<br /></p>
+                <input name="student[0].name" required />
+            </div>
+            <div class="col">
+                <p>
+                    Баллы:<br />
+                </p>
+                <input name="student[0].point" required />
+            </div>
+        </div>
+
+        <div id="new-student">
+        </div>
+               
+          </div>
+
+    <div class="row text-center p-3 mb-3">
+        <div class="col mb-4">
+        <button type="button" class="btn btn-secondary btn-block " onclick="addNewstudent()">Добавить еще студента</button>
+        </div>
+        <div class="col mb-4">
+        <button type="submit" class="btn-lg btn-primary btn-block mb-4  ">Отправить</button>
+        </div>
+        </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script>
+    let counter = 1;
+    function addNewstudent() {
+        
+        let newstudent = document.createElement("div");
+        newstudent.innerHTML = `<div class="row mb-4 ">        <div class="col">            <p> Имя Студента ${counter + 1} :<br /></p>        <input name="student[${counter}].name" required />        </div>        <div class="col">        <p>            Баллы:<br />        </p>            <input name="student[${counter}].point" required />        </div>    </div>`;
+        document.getElementById("new-student").appendChild(newstudent);
+        counter++;
+    }
+</script>

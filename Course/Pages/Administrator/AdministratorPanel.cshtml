@@ -1,0 +1,36 @@
+﻿@page
+@using Course.Model.Database;
+@model Course.Pages.Administrator.AdministratorPanelModel
+@{
+}
+<table class="table table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Имя студентов</th>
+            <th scope="col">Вид достижения</th>
+            <th scope="col">Информация</th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model?.AchievementsInformation){
+        <tr>
+            <th scope="row"></th>
+            <td>
+               @item.FullName
+            </td>
+             <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
+            <td>@item.Description</td>
+                <td><button type="button" class="btn btn-success" action="confirm"><a class="text-dark" asp-route-id="@item.Id" asp-page="/Administrator/AdministratorPanelAction/Confirm">Подтвердить</a></button></td>
+                <td><button type="button" class="btn btn-warning" action="confirm"><a class="text-dark" asp-route-id="@item.Id" asp-page="/Administrator/AdministratorPanelAction/Edit">Редактировать</a></td>
+                <td><button type="button" class="btn btn-danger" action="delete"><a class="text-dark" asp-route-id="@item.Id" asp-page="/Administrator/AdministratorPanelAction/Delete">Удалить</a></button></td>
+        </tr>
+        }
+    </tbody>
+
+</table>
+
+           @*  asp-route-achiveType="@item.AchievementType"*@

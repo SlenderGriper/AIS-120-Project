@@ -1,0 +1,29 @@
+﻿@page
+@using Course.Model.Database;
+@model Course.Pages.StudentOpportunities.InfoModel
+@{
+}
+
+<div class="text-center">
+    <h2 class="mb-3">Достижения</h2>
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Вид достижения</th>
+                <th scope="col">Информация</th>
+                <th scope="col">Баллы</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in Model?.AchievementsInformation){
+            <tr>
+                <td scope="row"></td>
+                    <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
+                    <td>@item.Description</td>
+                    <td>@item.Point</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,61 @@
+﻿@page
+@using Course.Model.Database.Enum;
+@model Course.Pages.Administrator.RegistrationModel
+@{
+}
+<h2 class="mb-3 text-center ">Зарегистрировать аккаунт</h2>
+
+<form method="post">
+<div class="card" style="border-radius: 15px;">
+    <div class="card-body">
+            
+        <div class="row align-items-center pt-4 pb-3">
+            <div class="col-md-3 ps-5">
+                    <label asp-for="Input.FullName" ></label>
+                </div>
+            <div class="col-md-9 pe-5">
+                    <input asp-for="Input.FullName" class="form-control" />
+                </div>
+                <span asp-validation-for="Input.FullName" class="text-danger"></span>  
+        </div>
+
+        <hr class="mx-n3">
+
+        <div class="row align-items-center py-3">
+                <div class="col-md-3 ps-5">
+                    <label asp-for="Input.HashPassword"></label>
+                </div>
+                <div class="col-md-9 pe-5">
+                    <input asp-for="Input.HashPassword" class="form-control" />
+                </div>
+                <span asp-validation-for="Input.HashPassword" class="text-danger"></span>
+            </div>
+
+        <hr class="mx-n3">
+
+        <div class="row align-items-center py-3">
+            <div class="col-md-3 ps-5">
+                    <label asp-for="Input.AccessRights"></label>
+
+            </div>
+            <div class="col-md-9 pe-5">
+                    <select asp-for="Input.AccessRights" asp-items="Html.GetEnumSelectList<Roles>()" class="form-select text-center">
+                    </select>
+
+            </div>
+        </div>
+
+        <hr class="mx-n3">
+
+
+        <div class="px-5 py-4 text-center">
+            <button type="submit" class="btn btn-primary btn-lg">Отправить</button>
+        </div>
+
+    </div>
+</div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

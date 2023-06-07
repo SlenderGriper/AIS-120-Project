@@ -1,0 +1,76 @@
+﻿@page
+@using Course.Model.Database.Enum;
+@model Course.Pages.Administrator.StudentsInfoModel
+@{
+}
+<div class="text-center">
+    <h2 class="mb-3">Достижения студентов</h2>
+    <form method="post" data-keepalive="true">
+        <div class="row justify-content-around p-3 mb-3">
+            <div class="col">
+                <label for="type" class="form-label fs-2">Вид работы</label>
+                <select asp-items="Html.GetEnumSelectList<AchiveType>()" class="form-select text-center" multiple aria-label="multiple select example" id="type" name="typeAchiv">
+                </select>
+            </div>
+            <div class="col">
+                <label for="typeSelect2" class="form-label fs-2">Кого выдать</label>
+                <select class="form-select text-center" multiple aria-label="multiple select example" id="typeSelect2" name="typeGet" preserve>
+                    <option selected value="t1">50 лучших студентов</option>
+                    <option value="t2">Все возможные достижения</option>
+                </select>
+            </div>
+        </div>
+        <div class="mb-3">
+            <input type="submit" value="Составить таблицу" class="btn btn-primary btn-lg">
+        </div>
+    </form>
+    @if (Model.IsStudentAchivTableCreated)
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Имя студента</th>
+                    <th scope="col">Информация</th>
+                    <th scope="col">Баллы</th>
+                </tr>
+            </thead>
+            <tbody>
+               
+                @foreach (var item in Model.AchievementsInformation)
+                {
+               <tr>
+                <td scope="row"></td>
+                <td>@item.FullName</td>
+                <td>@item.Description</td>
+                <td>@item.Point</td>
+                </tr>
+                }
+            
+
+        </tbody>
+    </table>
+    }
+      @if (Model.IsTopStudentTableCreated)
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+            <tr>
+               <th scope="col">#</th>
+                <th scope="col">Имя студента</th>
+                <th scope="col">Баллы</th>
+            </tr>
+        </thead>
+        <tbody>
+                @foreach (var item in Model.AchievementsInformation)
+                {
+            <tr>
+                <td scope="row"></td>
+                <td>@item.FullName</td>
+                <td>@item.Point</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    }
+</div>

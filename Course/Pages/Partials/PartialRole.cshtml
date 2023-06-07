@@ -1,0 +1,31 @@
+﻿@using System.Security.Claims;
+@if(User.Identity.IsAuthenticated){
+@if (User.FindFirst(ClaimTypes.Role).Value=="Student")
+{
+    
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Students/Info">Мои достижения</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Students/Request">Запрос</a>
+    </li>
+}
+@if (User.FindFirst(ClaimTypes.Role).Value == "Administrator")
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/AdministratorPanel">Панель администратора</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/StudentsInfo">Достижения студентов</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/Registration">Зарегистрировать пользователя</a>
+    </li>
+}
+@if (User.FindFirst(ClaimTypes.Role).Value == "Staff")
+{
+    <li class="nav-item">
+        <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/StudentsInfo">Достижения студентов</a>
+    </li>
+}
+}

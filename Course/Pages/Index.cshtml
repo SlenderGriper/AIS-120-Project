@@ -1,0 +1,30 @@
+﻿@page
+@using System.Security.Claims;
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<form method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="w-25 p-3 mx-auto text-center">
+    <div class="form-outline mb-4">
+            <label  asp-for="Input.FullName"></label>
+            <input asp-for="Input.FullName" class="form-control" />
+            <span asp-validation-for="Input.FullName" class="text-danger"></span>
+        
+    </div>
+    
+    <div class="form-outline mb-4">
+            <label  asp-for="Input.HashPassword"></label>
+            <input asp-for="Input.HashPassword" class="form-control" />
+            <span asp-validation-for="Input.HashPassword" class="text-danger"></span>
+        </div>
+
+        <div class="justify-content-center">
+            <input type="submit" class="btn btn-primary btn-block mb-4 " value="Sign in">
+        </div>
+    </div>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
