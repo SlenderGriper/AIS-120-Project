@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
+using Microsoft.VisualBasic.FileIO;
 using System.ComponentModel.DataAnnotations;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
@@ -18,11 +20,13 @@ namespace Course.Pages.StudentOpportunities
     {
         public record class Person(string Name, int Point, string? FilePath);
         private readonly AchievementContext _context;
-        
-        
-        public RequestModel(AchievementContext context)
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        public string Massage { get; set; }
+       
+        public RequestModel(AchievementContext context, IWebHostEnvironment hostEnvironment)
         {
             _context = context;
+            _hostingEnvironment = hostEnvironment;
         }
      
         [BindProperty]
@@ -39,94 +43,74 @@ namespace Course.Pages.StudentOpportunities
             {
                 id[index] = _context.Account.Where(f => f.FullName == item.Name).FirstOrDefault()?.ID;
                 id[index] = _context.Student.Where(f => f.AccountID == id[index]).FirstOrDefault()?.ID;
+                if (id[index] == null)
+                {
+                    Massage = item.Name + " не существует";
+                    return Page();
+                };
+            }
+            if (Input.Image == null || Input.Image.Length == 0)
+            {
+                Massage = "Файл пустой";
+                return Page();
+            }
+            if (!IsImage(Input.Image))
+            {
+                Massage = "Файл не картинка";
+                return Page();
+            }
+            var filePath = Path.Combine(_hostingEnvironment.WebRootPath, "Images", Input.Image.FileName);
+            if (FileSystem.FileExists(filePath))
+            {
+                Massage = "Файл с таким именем уже существует";
+                return Page();
+            }
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await Input.Image.CopyToAsync(stream);
             }
             int AchievementID;
             Achievement achievement = null;
             StudentsAchievements[] studentsAchievements = null;
-            switch (Input.AchievementType)
+            achievement = new Achievement();
+            achievement.ID = AchievementID = _context.Achievement.Max(u => u.ID) + 1;
+            achievement.Description = Input.Description;
+            achievement.AchievementType = Input.AchievementType;
+            achievement.FilePath = Input.Image.FileName;
+            _context.Achievement.Add(achievement);
+
+            studentsAchievements = new StudentsAchievements[student.Length];
+            for (int i = 0; i < student.Length; i++)
             {
-                case (AchiveType.Sport):
-                    achievement = new SportAchievement();
-                    achievement.ID = AchievementID = _context.SportAchievement.Max(u => u.ID) + 1;
-                    achievement.Description = Input.Description;
-                    _context.SportAchievement.Add((SportAchievement)achievement);
 
-                    studentsAchievements = new StudentsSportAchievements[student.Length];
-                    for (int i=0;i<student.Length;i++)
-                    {
-                        if (id[i] == null) continue;
-                        studentsAchievements[i] = new StudentsSportAchievements();
-                        studentsAchievements[i].AchievementID = AchievementID;
-                        studentsAchievements[i].StudentID = (int)id[i];
-                        studentsAchievements[i].Point = student[i].Point;
-                        studentsAchievements[i].FilePath = student[i].FilePath;
-                        _context.StudentsSportAchievements.Add((StudentsSportAchievements)studentsAchievements[i]);
-
-                    }
-                    break;
-                case (AchiveType.Research):
-                    achievement = new ResearchAchievement();
-                    achievement.ID = AchievementID = _context.ResearchAchievement.Max(u => u.ID) + 1;
-                    achievement.Description = Input.Description;
-                    _context.ResearchAchievement.Add((ResearchAchievement)achievement);
-
-                    studentsAchievements = new StudentsResearchAchievements[student.Length];
-                    for (int i = 0; i < student.Length; i++)
-                    {
-                        if (id[i] == null) continue;
-                        studentsAchievements[i] = new StudentsResearchAchievements();
-                        studentsAchievements[i].AchievementID = AchievementID;
-                        studentsAchievements[i].StudentID = (int)id[i];
-                        studentsAchievements[i].Point = student[i].Point;
-                        studentsAchievements[i].FilePath = student[i].FilePath;
-                        _context.StudentsResearchAchievements.Add((StudentsResearchAchievements)studentsAchievements[i]);
-
-                    }
-                    break;
-                case (AchiveType.Social):
-                    achievement = new SocialAchievement();
-                    achievement.ID = AchievementID = _context.SocialAchievement.Max(u => u.ID) + 1;
-                    achievement.Description = Input.Description;
-                    _context.SocialAchievement.Add((SocialAchievement)achievement);
-
-                    studentsAchievements = new StudentsSocialAchievements[student.Length];
-                    for (int i = 0; i < student.Length; i++)
-                    {
-                        if (id[i] == null) continue;
-                        studentsAchievements[i] = new StudentsSocialAchievements();
-                        studentsAchievements[i].AchievementID = AchievementID;
-                        studentsAchievements[i].StudentID = (int)id[i];
-                        studentsAchievements[i].Point = student[i].Point;
-                        studentsAchievements[i].FilePath = student[i].FilePath;
-                        _context.StudentsSocialAchievements.Add((StudentsSocialAchievements)studentsAchievements[i]);
-
-                    }
-                    break;
-                case (AchiveType.Cultural):
-                    achievement = new CulturalAchievement();
-                    achievement.ID = AchievementID = _context.CulturalAchievement.Max(u => u.ID) + 1;
-                    achievement.Description = Input.Description;
-                    _context.CulturalAchievement.Add((CulturalAchievement)achievement);
-
-                    studentsAchievements = new StudentsCulturalAchievements[student.Length];
-                    for (int i = 0; i < student.Length; i++)
-                    {
-                        if (id[i] == null) continue;
-                        studentsAchievements[i] = new StudentsCulturalAchievements();
-                        studentsAchievements[i].AchievementID = AchievementID;
-                        studentsAchievements[i].StudentID = (int)id[i];
-                        studentsAchievements[i].Point = student[i].Point;
-                        studentsAchievements[i].FilePath = student[i].FilePath;
-                        _context.StudentsCulturalAchievements.Add((StudentsCulturalAchievements)studentsAchievements[i]);
-
-                    }
-                    break;
+                studentsAchievements[i] = new StudentsAchievements();
+                studentsAchievements[i].AchievementID = AchievementID;
+                studentsAchievements[i].StudentID = (int)id[i];
+                studentsAchievements[i].Point = student[i].Point;
+                
+                _context.StudentsAchievements.Add(studentsAchievements[i]);
 
             }
             await _context.SaveChangesAsync();
+            Massage = "Запрос на"+Input.Description+" был отправлен";
             return Page();
         }
 
+
+
+
+        private bool IsImage(IFormFile file)
+        {
+            if (file.ContentType.ToLower() != "image/jpg" &&
+                file.ContentType.ToLower() != "image/png" &&
+                file.ContentType.ToLower() != "image/jpeg")
+            {
+                return false;
+            }
+
+            return true;
+        }
         public class InputItem
         {
 
@@ -138,6 +122,9 @@ namespace Course.Pages.StudentOpportunities
             [Required]
             [Display(Name = "Информация")]
             public string? Description { get; set; }
+            [Required]
+            [Display(Name = "Картинка")]
+            public IFormFile? Image { get; set; }
         }
     }
 }

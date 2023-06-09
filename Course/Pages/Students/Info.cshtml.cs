@@ -35,9 +35,9 @@ namespace Course.Pages.StudentOpportunities
                                                       where a.WhoСonfirmed != null
             select new AchievementInformation
                       {
-                          AchievementType=a.AchievementType(),
+                          AchievementType=a.AchievementType,
                           Point = sa.Point,
-                          FilePath = sa.FilePath,
+                          FilePath = @"\Images\" + a.FilePath,
                           Description = a.Description,
                           WhoСonfirmed = a.WhoСonfirmed
                       };
@@ -51,21 +51,10 @@ namespace Course.Pages.StudentOpportunities
             IList<Achievement> achievement;
             IList<StudentsAchievements> studentsAchievements;
 
-            achievement = _context.SocialAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsSocialAchievements.ToList<StudentsAchievements>();
+            achievement = _context.Achievement.ToList<Achievement>();
+            studentsAchievements = _context.StudentsAchievements.ToList<StudentsAchievements>();
             achievementInformation = CreateAchievementInformation(achievement, studentsAchievements);
 
-            achievement = _context.ResearchAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsResearchAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
-
-            achievement = _context.CulturalAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsCulturalAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
-
-            achievement = _context.SportAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsSportAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
             AchievementsInformation = achievementInformation.ToList();
 
         }

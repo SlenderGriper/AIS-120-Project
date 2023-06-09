@@ -16,35 +16,38 @@ namespace Course.Pages.Administrator
     {
         private readonly Data.AchievementContext _context;
 
-        public StudentsInfoModel(Data.AchievementContext context)
+        public StudentsInfoModel(Data.AchievementContext context, IWebHostEnvironment hostingEnvironment)
         {
             _context = context;
         }
         public bool IsStudentAchivTableCreated { get; set; } = false;
         public bool IsTopStudentTableCreated { get; set; } = false;
         public IList<AchievementInformation> AchievementsInformation { get; set; } = default!;
-        public async void CreateAchievementInformation(IList<Achievement> achievement, IList<StudentsAchievements> studentsAchievements)
+        public async void CreateAchievementInformation(AchiveType achive)
         {
-            if (achievement == null) return;
-            if (studentsAchievements == null) return;
-            var all = (from a in achievement
-                       join sa in studentsAchievements on a.ID equals sa.AchievementID
+            if (_context.Achievement == null) return;
+            if (_context.StudentsAchievements == null) return;
+            var all = (from a in _context.Achievement
+                       join sa in _context.StudentsAchievements on a.ID equals sa.AchievementID
                        join s in _context.Student on sa.StudentID equals s.ID
                        join u in _context.Account on s.AccountID equals u.ID
                        orderby sa.Point descending
+                       where achive==a.AchievementType
                        select new AchievementInformation
                        {
                            FullName = u.FullName,
                            Point = sa.Point,
-                           FilePath = sa.FilePath,
+                           FilePath = @"\Images\" + a.FilePath,
                            Description = a.Description,
                        });
             AchievementsInformation = all.ToList();
         }
-        public async void CreateBestStudentInformation(IList<StudentsAchievements> studentsAchievements)
+        public async void CreateBestStudentInformation( AchiveType achive)
         {
-            if (studentsAchievements == null) return;
-            var achiv = from sa in studentsAchievements
+            if (_context.StudentsAchievements == null) return;
+            var achiv = from sa in _context.StudentsAchievements
+                        join a in _context.Achievement on sa.AchievementID equals a.ID
+                        where a.AchievementType == achive
                         group sa by sa.StudentID into stud
                         select new
                         {
@@ -55,7 +58,7 @@ namespace Course.Pages.Administrator
             var bestStudent = from a in achiv
                               join s in _context.Student on a.Key equals s.ID
                               join u in _context.Account on s.AccountID equals u.ID
-                              orderby a.Point descending
+                              orderby a.Point descending    
                               select new AchievementInformation
                               {
                                   FullName = u.FullName,
@@ -68,9 +71,7 @@ namespace Course.Pages.Administrator
 
             if (typeGet == "t1")
             {
-                List<StudentsAchievements> studentsAchievements = null;
-                studentsAchievements = AchievementContextHelper.StudentsAchievements(typeAchiv, _context);
-                CreateBestStudentInformation(studentsAchievements);
+                CreateBestStudentInformation(typeAchiv);
                 IsStudentAchivTableCreated = false;
                 IsTopStudentTableCreated = true;
             }
@@ -78,28 +79,9 @@ namespace Course.Pages.Administrator
             {
                 List<Achievement> achievement = null;
                 List<StudentsAchievements> studentsAchievements = null;
-                if (typeAchiv == AchiveType.Social)
-                {
-                    achievement = _context.SocialAchievement.ToList<Achievement>();
-                    studentsAchievements = _context.StudentsSocialAchievements.ToList<StudentsAchievements>();
-                }
-                else if (typeAchiv == AchiveType.Research)
-                {
-                    achievement = _context.ResearchAchievement.ToList<Achievement>();
-                    studentsAchievements = _context.StudentsResearchAchievements.ToList<StudentsAchievements>();
-                }
-                else if (typeAchiv == AchiveType.Cultural)
-                {
-                    achievement = _context.CulturalAchievement.ToList<Achievement>();
-                    studentsAchievements = _context.StudentsCulturalAchievements.ToList<StudentsAchievements>();
-                }
-                else if (typeAchiv == AchiveType.Sport)
-                {
-                    achievement = _context.SportAchievement.ToList<Achievement>();
-                    studentsAchievements = _context.StudentsSportAchievements.ToList<StudentsAchievements>();
-                }
 
-                CreateAchievementInformation(achievement, studentsAchievements);
+
+                CreateAchievementInformation(typeAchiv);
                 IsStudentAchivTableCreated = true;
                 IsTopStudentTableCreated = false;
             }

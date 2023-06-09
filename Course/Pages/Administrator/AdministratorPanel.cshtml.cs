@@ -28,11 +28,11 @@ namespace Course.Pages.Administrator
                                                       join s in _context.Student on sa.StudentID equals s.ID
                                                       join u in _context.Account on s.AccountID equals u.ID
                                                       where a.WhoСonfirmed == null
-                                                      group u.FullName by new { a.ID, a.Description, a.WhoСonfirmed } into g
+                                                      group u.FullName by new { a.ID, a.Description, a.WhoСonfirmed,a.AchievementType } into g
                                                       select new AchievementInformation
                                                       {
                                                           Id = g.Key.ID,
-                                                          AchievementType = achievement[0].AchievementType(),
+                                                          AchievementType = g.Key.AchievementType,
                                                           FullName = string.Join(", ", g),
                                                           Description = g.Key.Description,
                                                           WhoСonfirmed = g.Key.WhoСonfirmed
@@ -46,34 +46,12 @@ namespace Course.Pages.Administrator
             IList<Achievement> achievement;
             IList<StudentsAchievements> studentsAchievements;
 
-            achievement = _context.SocialAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsSocialAchievements.ToList<StudentsAchievements>();
+            achievement = _context.Achievement.ToList();
+            studentsAchievements = _context.StudentsAchievements.ToList();
             achievementInformation = CreateAchievementInformation(achievement, studentsAchievements);
 
-            achievement = _context.ResearchAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsResearchAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
-
-            achievement = _context.CulturalAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsCulturalAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
-
-            achievement = _context.SportAchievement.ToList<Achievement>();
-            studentsAchievements = _context.StudentsSportAchievements.ToList<StudentsAchievements>();
-            achievementInformation = achievementInformation.Union(CreateAchievementInformation(achievement, studentsAchievements));
             AchievementsInformation = achievementInformation.ToList();
 
-        }
-        public async void OnPostAsycn(string action,int id)
-        {
-            //switch (action)
-            //{
-            //    case"confirm":  
-            //        break;
-            //    case "delete":
-            //        break;
-            //}
-            Console.WriteLine(action + id);
         }
     }
 }

@@ -20,44 +20,51 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
         }
 
         [BindProperty]
-      public SportAchievement SportAchievement { get; set; } = default!;
+      public Achievement Achievement { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.SportAchievement == null)
+            if (id == null || _context.Achievement == null)
             {
                 return NotFound();
             }
 
-            var sportachievement = await _context.SportAchievement.FirstOrDefaultAsync(m => m.ID == id);
+            var achievement = await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
 
-            if (sportachievement == null)
+            if (achievement == null)
             {
                 return NotFound();
             }
             else 
             {
-                SportAchievement = sportachievement;
+                Achievement = achievement;
             }
             return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
-            if (id == null || _context.SportAchievement == null)
+            if (id == null || _context.Achievement == null)
             {
                 return NotFound();
             }
-            var sportachievement = await _context.SportAchievement.FindAsync(id);
+            var achievement = await _context.Achievement.FindAsync(id);
 
-            if (sportachievement != null)
+            if (achievement != null)
             {
-                SportAchievement = sportachievement;
-                _context.SportAchievement.Remove(SportAchievement);
+                Achievement = achievement;
+                
+                var students = _context.StudentsAchievements.Where(p => p.AchievementID == achievement.ID).ToList();
+                foreach(var student in students)
+                {
+                    _context.StudentsAchievements.Remove(student);
+                }
                 await _context.SaveChangesAsync();
+                _context.Achievement.Remove(Achievement);
             }
-
-            return RedirectToPage("./Index");
+            
+            await _context.SaveChangesAsync();
+            return RedirectToPage("/Administrator/AdministratorPanel");
         }
     }
 }

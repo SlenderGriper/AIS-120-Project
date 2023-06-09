@@ -12,7 +12,7 @@ namespace Course.Pages.Administrator
     public class RegistrationModel : PageModel
     {
         private readonly Course.Data.AchievementContext _context;
-
+        public string Massage { get; set; }
         public RegistrationModel(Course.Data.AchievementContext context)
         {
             _context = context;
@@ -32,7 +32,7 @@ namespace Course.Pages.Administrator
                 var user = _context.Account.Where(f => f.FullName == Input.FullName).FirstOrDefault();
                 if (user != null)
                 {
-                    ModelState.AddModelError(string.Empty, Input.FullName + " Alrready exists");
+                    Massage= Input.FullName + " Alrready exists";
                 }
                 else
                 {
@@ -41,6 +41,16 @@ namespace Course.Pages.Administrator
                     Console.WriteLine(Input.ID);
                      _context.Account.Add(Input);
                     await _context.SaveChangesAsync();
+
+                    if (Input.AccessRights == Model.Database.Enum.Roles.Student)
+                    {
+                        var stud = new Student();
+                        stud.ID = _context.Student.Max(u => u.ID + 1);
+                        stud.AccountID = Input.ID;
+                        _context.Student.Add(stud);
+                        await _context.SaveChangesAsync();
+                    }
+                    Massage = Input.FullName + "Create";
                 }
 
             }

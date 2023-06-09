@@ -13,6 +13,7 @@
                 <th scope="col">Вид достижения</th>
                 <th scope="col">Информация</th>
                 <th scope="col">Баллы</th>
+                <th scope="col">Диплом</th>
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,7 @@
                     <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
                     <td>@item.Description</td>
                     <td>@item.Point</td>
+                    <td><img src="@item.FilePath" height="200"></td>
             </tr>
             }
         </tbody>

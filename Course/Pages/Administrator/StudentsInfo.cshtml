@@ -1,5 +1,6 @@
 ﻿@page
 @using Course.Model.Database.Enum;
+@using Microsoft.AspNetCore.Mvc.RazorPages;
 @model Course.Pages.Administrator.StudentsInfoModel
 @{
 }
@@ -33,6 +34,7 @@
                     <th scope="col">Имя студента</th>
                     <th scope="col">Информация</th>
                     <th scope="col">Баллы</th>
+                    <th scope="col">Диплом</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,6 +46,7 @@
                 <td>@item.FullName</td>
                 <td>@item.Description</td>
                 <td>@item.Point</td>
+                <td><img src="@item.FilePath"  height="200"></td>
                 </tr>
                 }
             

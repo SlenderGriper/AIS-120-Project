@@ -21,16 +21,16 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
         }
 
         [BindProperty]
-        public SportAchievement SportAchievement { get; set; } = default!;
+        public Achievement SportAchievement { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null || _context.SportAchievement == null)
+            if (id == null || _context.Achievement == null)
             {
                 return NotFound();
             }
 
-            var sportachievement = await _context.SportAchievement.FirstOrDefaultAsync(m => m.ID == id);
+            var sportachievement = await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
             if (sportachievement == null)
             {
                 return NotFound();
@@ -66,12 +66,12 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Administrator/AdministratorPanel");
         }
 
         private bool SportAchievementExists(int id)
         {
-            return (_context.SportAchievement?.Any(e => e.ID == id)).GetValueOrDefault();
+            return (_context.Achievement?.Any(e => e.ID == id)).GetValueOrDefault();
         }
     }
 }

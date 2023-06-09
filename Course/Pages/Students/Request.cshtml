@@ -5,7 +5,8 @@
 }
 
 <h2 class="mb-3 text-center ">Добавить новое достижение</h2>
-<form method="post">
+<p>@Model.Massage</p>
+<form method="post" enctype="multipart/form-data">
     <div class="text-center">
         <div class="row justify-content-around p-3 mb-3">
         <div class="col mb-4">
@@ -16,6 +17,12 @@
             <div class="col mb-4">
                 <label asp-for="Input.Description" class="form-label fs-2"></label>
                 <textarea asp-for="Input.Description"  class="form-control"  rows="3"></textarea>
+            </div>
+            <div class="col mb-4">
+                <label asp-for="Input.Image"></label>
+
+                <input asp-for="Input.Image" type="file">
+                <span asp-validation-for="Input.Image"></span>
             </div>
         </div>
         <div class="row mb-4 ">

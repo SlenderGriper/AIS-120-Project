@@ -5,6 +5,34 @@
       "PackagePath": "staticwebassets\\Course.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\1670087900_grizly-club-p-shablon-diplom-pustoi-1.jpg",
+      "PackagePath": "staticwebassets\\Images\\1670087900_grizly-club-p-shablon-diplom-pustoi-1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\cultural1.jpg",
+      "PackagePath": "staticwebassets\\Images\\cultural1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\research1.jpg",
+      "PackagePath": "staticwebassets\\Images\\research1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\research2.jpg",
+      "PackagePath": "staticwebassets\\Images\\research2.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\social1.jpg",
+      "PackagePath": "staticwebassets\\Images\\social1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\sport1.jpg",
+      "PackagePath": "staticwebassets\\Images\\sport1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\Images\\sport2.jpg",
+      "PackagePath": "staticwebassets\\Images\\sport2.jpg"
+    },
+    {
       "Id": "C:\\Users\\Dark NinGen\\source\\repos\\Course\\AIS-120-Project\\Course\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },

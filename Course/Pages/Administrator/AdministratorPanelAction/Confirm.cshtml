@@ -4,6 +4,9 @@
 }
 <form method="post">
     <input type="hidden" asp-for="SportAchievement.ID" />
+    <input type="hidden" asp-for="SportAchievement.Description" />
+    <input type="hidden" asp-for="SportAchievement.AchievementType" />
+    <input type="hidden" asp-for="SportAchievement.FilePath" />
     <input type="submit" value="Подтвердить" class="btn btn-success" /> |
-    <a asp-page="./Index">Back to List</a>
+    <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/AdministratorPanel">Панель администратора</a>
 </form>
