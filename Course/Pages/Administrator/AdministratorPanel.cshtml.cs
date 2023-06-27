@@ -27,7 +27,7 @@ namespace Course.Pages.Administrator
                                                       join sa in studentsAchievements on a.ID equals sa.AchievementID
                                                       join s in _context.Student on sa.StudentID equals s.ID
                                                       join u in _context.Account on s.AccountID equals u.ID
-                                                      where a.WhoСonfirmed == null
+                                                      where a.Status == AchiveStatus.Sent
                                                       group u.FullName by new { a.ID, a.Description, a.WhoСonfirmed,a.AchievementType } into g
                                                       select new AchievementInformation
                                                       {

@@ -6,26 +6,64 @@
 
 <div class="text-center">
     <h2 class="mb-3">Достижения</h2>
-    <table class="table table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Вид достижения</th>
-                <th scope="col">Информация</th>
-                <th scope="col">Баллы</th>
-                <th scope="col">Диплом</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach(var item in Model?.AchievementsInformation){
-            <tr>
-                <td scope="row"></td>
-                    <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
-                    <td>@item.Description</td>
-                    <td>@item.Point</td>
-                    <td><img src="@item.FilePath" height="200"></td>
-            </tr>
-            }
-        </tbody>
+    @if (!Model.isDraft)
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Вид достижения</th>
+                    <th scope="col">Информация</th>
+                    <th scope="col">Баллы</th>
+                    <th scope="col">Диплом</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model?.AchievementsInformation)
+                {
+                    <tr>
+                        <td scope="row"></td>
+                        <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
+                        <td>@item.Description</td>
+                        <td>@item.Point</td>
+                        <td><img src="@item.FilePath" height="200"></td>
+                    </tr>
+                }
+            </tbody>
     </table>
+    }
+    @if (Model.isDraft)
+    {
+        <table class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Вид достижения</th>
+                    <th scope="col">Информация</th>
+                    <th scope="col">Статус</th>
+                    <th scope="col">Сообщение от администратора</th>
+                    <th scope="col">Редактировать</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model?.AchievementsInformation)
+                {
+                    <tr>
+                        <td scope="row"></td>
+                        <td>@EnumToRu.GetRuAchiveType(item.AchievementType)</td>
+                        <td>@item.Description</td>
+                        <td>@item.Status</td>
+                        <td>@item.FailMessage</td>
+                        <td>@if (item.Status == Course.Model.Database.Enum.AchiveStatus.Draft || item.Status == Course.Model.Database.Enum.AchiveStatus.Rejected){
+                            <a asp-page="Request" asp-route-id="@item.Id">Редактировать</a>
+                            }
+                        </td>
+                    
+
+                    </tr>
+                }
+            </tbody>
+    </table>
+    }
+
 </div>

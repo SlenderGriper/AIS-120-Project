@@ -12,15 +12,15 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
 {
     public class DeleteModel : PageModel
     {
-        private readonly Course.Data.AchievementContext _context;
+        private readonly AchievementContext _context;
 
-        public DeleteModel(Course.Data.AchievementContext context)
+        public DeleteModel(AchievementContext context)
         {
             _context = context;
         }
-
         [BindProperty]
-      public Achievement Achievement { get; set; } = default!;
+        public string FullName { get; set; }
+        public Achievement Achievement { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -30,7 +30,10 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
             }
 
             var achievement = await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
-
+            var StudentsAchievements = await _context.StudentsAchievements.FirstOrDefaultAsync(m => m.AchievementID == achievement.ID);
+            var idName = await _context.Student.FirstOrDefaultAsync(m => m.ID == StudentsAchievements.StudentID);
+            var account = await _context.Account.FirstOrDefaultAsync(m => m.ID == idName.AccountID);
+            FullName = account.FullName;
             if (achievement == null)
             {
                 return NotFound();
@@ -49,21 +52,17 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
                 return NotFound();
             }
             var achievement = await _context.Achievement.FindAsync(id);
+            var studentsAchievements = await _context.StudentsAchievements.FirstOrDefaultAsync(m => m.AchievementID == achievement.ID);
 
-            if (achievement != null)
+            if (achievement != null&& studentsAchievements!=null)
             {
-                Achievement = achievement;
-                
-                var students = _context.StudentsAchievements.Where(p => p.AchievementID == achievement.ID).ToList();
-                foreach(var student in students)
-                {
-                    _context.StudentsAchievements.Remove(student);
-                }
+                _context.StudentsAchievements.Remove(studentsAchievements);
                 await _context.SaveChangesAsync();
-                _context.Achievement.Remove(Achievement);
+                _context.Achievement.Remove(achievement);
+                await _context.SaveChangesAsync();
             }
             
-            await _context.SaveChangesAsync();
+           
             return RedirectToPage("/Administrator/AdministratorPanel");
         }
     }

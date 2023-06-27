@@ -4,8 +4,11 @@
 {
     
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-page="/Students/Info">Мои достижения</a>
+            <a class="nav-link text-dark" asp-area="" asp-page="/Students/Info" asp-route-param="MyAcheiv">Мои достижения</a>
     </li>
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-area="" asp-page="/Students/Info" asp-route-param="Draft">Черновик и непринятые достижения</a>
+        </li>
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-page="/Students/Request">Запрос</a>
     </li>

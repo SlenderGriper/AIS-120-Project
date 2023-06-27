@@ -36,7 +36,7 @@ namespace Course.Pages.Administrator
                        select new AchievementInformation
                        {
                            FullName = u.FullName,
-                           Point = sa.Point,
+                           Point = (double)sa.Point,
                            FilePath = @"\Images\" + a.FilePath,
                            Description = a.Description,
                        });
@@ -62,7 +62,7 @@ namespace Course.Pages.Administrator
                               select new AchievementInformation
                               {
                                   FullName = u.FullName,
-                                  Point = a.Point
+                                  Point = (double)a.Point
                               };
             AchievementsInformation = bestStudent.ToList();
         }

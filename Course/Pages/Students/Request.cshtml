@@ -8,6 +8,9 @@
 <p>@Model.Massage</p>
 <form method="post" enctype="multipart/form-data">
     <div class="text-center">
+        <input type="hidden" asp-for="Input.FilePath" />
+        <input type="hidden" asp-for="Input.ID" />
+        <input type="hidden" asp-for="Input.IsDraft" />
         <div class="row justify-content-around p-3 mb-3">
         <div class="col mb-4">
             <label asp-for="Input.AchievementType" class="form-label fs-2"></label>
@@ -25,43 +28,18 @@
                 <span asp-validation-for="Input.Image"></span>
             </div>
         </div>
-        <div class="row mb-4 ">
-            <div class="col">
-                <p> Имя Студента 1 :<br /></p>
-                <input name="student[0].name" required />
-            </div>
-            <div class="col">
-                <p>
-                    Баллы:<br />
-                </p>
-                <input name="student[0].point" required />
-            </div>
-        </div>
-
-        <div id="new-student">
-        </div>
-               
-          </div>
 
     <div class="row text-center p-3 mb-3">
         <div class="col mb-4">
-        <button type="button" class="btn btn-secondary btn-block " onclick="addNewstudent()">Добавить еще студента</button>
-        </div>
-        <div class="col mb-4">
-        <button type="submit" class="btn-lg btn-primary btn-block mb-4  ">Отправить</button>
+                <button type="submit" class="btn-lg btn-primary btn-block mb-4 " asp-route-param="Draft">Черновик</button>
+                <button type="submit" class="btn-lg btn-primary btn-block mb-4 " asp-route-param="Sent"> Отправить</button>
         </div>
         </div>
 </form>
+@if (Model.Input.IsDraft)
+{
+    <img src="\Images\@Model.Input.FilePath" alt="Achievement Image" weiht="300" height="400">
+}
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-<script>
-    let counter = 1;
-    function addNewstudent() {
-        
-        let newstudent = document.createElement("div");
-        newstudent.innerHTML = `<div class="row mb-4 ">        <div class="col">            <p> Имя Студента ${counter + 1} :<br /></p>        <input name="student[${counter}].name" required />        </div>        <div class="col">        <p>            Баллы:<br />        </p>            <input name="student[${counter}].point" required />        </div>    </div>`;
-        document.getElementById("new-student").appendChild(newstudent);
-        counter++;
-    }
-</script>

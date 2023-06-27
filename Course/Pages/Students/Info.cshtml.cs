@@ -18,6 +18,7 @@ namespace Course.Pages.StudentOpportunities
     [Authorize]
     public class InfoModel : PageModel
     {
+        public bool isDraft { get; set; }
         private readonly AchievementContext _context;
         public InfoModel(AchievementContext context)
         {
@@ -26,6 +27,7 @@ namespace Course.Pages.StudentOpportunities
         public IList<AchievementInformation> AchievementsInformation { get; set; } = default!;
         public IEnumerable<AchievementInformation> CreateAchievementInformation(IList<Achievement> achievement, IList<StudentsAchievements> studentsAchievements)
         {
+            isDraft = false;
             if (achievement == null) return null;
             if (studentsAchievements == null) return null;
             int? id= _context.Student.Where(f => f.AccountID.ToString() == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault()?.ID;
@@ -36,16 +38,37 @@ namespace Course.Pages.StudentOpportunities
             select new AchievementInformation
                       {
                           AchievementType=a.AchievementType,
-                          Point = sa.Point,
+                          Point = (double)sa.Point,
                           FilePath = @"\Images\" + a.FilePath,
                           Description = a.Description,
+                           Status = a.Status,
                           WhoСonfirmed = a.WhoСonfirmed
                       };
             Console.WriteLine(all.ToList().Count);
             return all;
         }
-
-        public void OnGet()
+        public IEnumerable<AchievementInformation> CreateDraftAchievementInformation(IList<Achievement> achievement, IList<StudentsAchievements> studentsAchievements)
+        {
+            isDraft = true;
+            if (achievement == null) return null;
+            if (studentsAchievements == null) return null;
+            int? id = _context.Student.Where(f => f.AccountID.ToString() == User.FindFirst(ClaimTypes.NameIdentifier).Value).FirstOrDefault()?.ID;
+            IEnumerable<AchievementInformation> all = from sa in studentsAchievements
+                                                      join a in achievement on sa.AchievementID equals a.ID
+                                                      where sa.StudentID == id
+                                                      where a.WhoСonfirmed == null
+                                                      select new AchievementInformation
+                                                      {
+                                                          Id = a.ID,
+                                                          AchievementType = a.AchievementType,
+                                                          Description = a.Description,
+                                                         Status = a.Status,
+                                                         FailMessage=sa?.FailMessage
+                                                      };
+            Console.WriteLine(all.ToList().Count);
+            return all;
+        }
+        public void OnGet(string param)
         {
             IEnumerable<AchievementInformation> achievementInformation=null;
             IList<Achievement> achievement;
@@ -53,8 +76,14 @@ namespace Course.Pages.StudentOpportunities
 
             achievement = _context.Achievement.ToList<Achievement>();
             studentsAchievements = _context.StudentsAchievements.ToList<StudentsAchievements>();
-            achievementInformation = CreateAchievementInformation(achievement, studentsAchievements);
-
+            if (param == "Draft")
+            {
+                achievementInformation = CreateDraftAchievementInformation(achievement, studentsAchievements);
+            }
+            else
+            {
+                achievementInformation = CreateAchievementInformation(achievement, studentsAchievements);
+            }
             AchievementsInformation = achievementInformation.ToList();
 
         }

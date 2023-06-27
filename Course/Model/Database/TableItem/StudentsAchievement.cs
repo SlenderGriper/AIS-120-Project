@@ -10,8 +10,8 @@ namespace Course.Model.DatabaseTables.StudentAchivement
       public int ID { get; set; }
         public int StudentID { get; set; }
         public int AchievementID { get; set; }
-        public double Point { get; set; }
-       
+        public double? Point { get; set; }
+       public string? FailMessage { get; set; }
 
     }
 

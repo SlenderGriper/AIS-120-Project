@@ -1,4 +1,5 @@
 ﻿@page
+@using Course.Model.Database.Enum;
 @model Course.Pages.Administrator.AdministratorPanelAction.EditModel
 
 @{
@@ -7,28 +8,42 @@
 
 <h1>Edit</h1>
 
-<h4>SportAchievement</h4>
+<h4>Achievement</h4>
 <hr />
+<p>@Model.Massage</p>
 <div class="row">
     <div class="col-md-4">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="SportAchievement.ID" />
-            <div class="form-group">
-                <label asp-for="SportAchievement.Description" class="control-label"></label>
-                <input asp-for="SportAchievement.Description" class="form-control" />
-                <span asp-validation-for="SportAchievement.Description" class="text-danger"></span>
+            <input type="hidden" asp-for="Input.FilePath" />
+            <input type="hidden" asp-for="Input.ID" />
+            <div class="row align-items-center py-3">
+                <label asp-for="Input.Description" class="control-label"></label>
+                <input asp-for="Input.Description" class="form-control" />
+                <span asp-validation-for="Input.Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="row align-items-center py-3">
+                <label asp-for="Input.Point" class="control-label"></label>
+                <input asp-for="Input.Point" class="form-control" />
+                <span asp-validation-for="Input.Point" class="text-danger"></span>
+            </div>
+            <div class="row align-items-center py-3">
+                <label asp-for="Input.AchievementType" class="form-label fs-2"></label>
+                <select asp-for="Input.AchievementType" asp-items="Html.GetEnumSelectList<AchiveType>()" class=" form-select text-center" id="type">
+                </select>
+            </div>
+            <div class="row align-items-center py-3">
+                <label asp-for="Input.Image"></label>
+                <input asp-for="Input.Image" type="file">
+                <span asp-validation-for="Input.Image"></span>
+            </div>
+            <div class="row align-items-center py-3">
+                <button type="submit" class="btn btn-primary" />Подвердить</button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/AdministratorPanel">Панель администратора</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

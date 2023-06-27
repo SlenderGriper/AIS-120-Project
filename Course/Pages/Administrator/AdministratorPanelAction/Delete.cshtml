@@ -6,22 +6,16 @@
 
 <h1>Удаление</h1>
 
-<h3>Вы уверены, что хотите удалить эту запись</h3>
+<h3>Вы уверены, что хотите безвозвратно удалить эту запись</h3>
 <div>
-    <h4>Достижение</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Achievement.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Achievement.Description)
-        </dd>
-    </dl>
+    <div class="card-body ">
+        <p>Имя студента - @Model.FullName</p>
+        <p>Описание достижения - @Model.Achievement.Description</p>
+        <p>Тип достижения - @Model.Achievement.AchievementType</p>
+    </div>
     
     <form method="post">
         <input type="hidden" asp-for="Achievement.ID" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a class="nav-link text-dark" asp-area="" asp-page="/Administrator/AdministratorPanel">Панель администратора</a>
     </form>
 </div>

@@ -12,5 +12,6 @@ namespace Course.Model.DatabaseTables.Achievement
         public string? Description { get; set; }
         public AchiveType AchievementType { get; set; }
         public string? FilePath { get; set; }
+        public AchiveStatus Status { get; set; }
     }
 }

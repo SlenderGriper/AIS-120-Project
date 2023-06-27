@@ -1,0 +1,30 @@
+﻿@page
+@model Course.Pages.Administrator.AdministratorPanelAction.AboutModel
+@{
+}
+<div class="container">
+    <div class="justify-content-center">
+
+        <div class="card text-center">
+            <div class="card-body ">
+                <p>Имя студента - @Model.FullName</p>
+                <p>Описание достижения - @Model.Achievement.Description</p>
+                <p>Тип достижения - @Model.Achievement.AchievementType</p>
+                <img src="\Images\@Model.Achievement.FilePath"  alt="Achievement Image" height="450" width="300">
+            </div>
+            <div class="row card-footer justify-content-around">
+                <div class="col-4">
+                    <button type="button" class="btn btn-success" ><a class="text-dark" asp-route-id="@Model.Achievement.ID" asp-page="/Administrator/AdministratorPanelAction/Edit">Подтвердить</a></button>
+                </div>
+                <div class="col-4">
+                    <button type="button" class="btn btn-warning"><a class="text-dark" asp-route-id="@Model.Achievement.ID" asp-page="/Administrator/AdministratorPanelAction/Confirm">Отклонить</a></button>
+                </div>      
+                <div class="col-4">
+                    <button type="button" class="btn btn-danger"><a class="text-dark" asp-route-id="@Model.Achievement.ID" asp-page="/Administrator/AdministratorPanelAction/Delete">Удалить</a></button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+    </div>
+

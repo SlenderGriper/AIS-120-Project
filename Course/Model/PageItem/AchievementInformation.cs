@@ -26,6 +26,8 @@ namespace Course.Model.PageItem
         [Required]
         [Display(Name = "Путь к файлу")]
         public string? FilePath { get; set; }
+        public string? FailMessage { get; set; }
+        public AchiveStatus Status { get; set; }
         public string? WhoСonfirmed { get; set; }
     }
 }

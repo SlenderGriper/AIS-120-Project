@@ -1,4 +1,5 @@
 ﻿using Course.Data;
+using Course.Model.Database.Enum;
 using Course.Model.DatabaseTables.Achievement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -17,7 +18,8 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
         }
 
         [BindProperty]
-        public Achievement SportAchievement { get; set; } = default!;
+        public string FailMassage { get; set; }
+        public Achievement Achievement { get; set; } 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null || _context.Achievement == null)
@@ -25,31 +27,32 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
                 return NotFound();
             }
 
-            var sportachievement = await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
-            if (sportachievement == null)
+            Achievement = await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
+            if (Achievement == null)
             {
                 return NotFound();
             }
-            SportAchievement = sportachievement;
             return Page();
         }
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int id)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
-            SportAchievement.WhoСonfirmed = User.FindFirst(ClaimTypes.Name)?.Value;
-
-            _context.Attach(SportAchievement).State = EntityState.Modified;
-
+            Achievement= await _context.Achievement.FirstOrDefaultAsync(m => m.ID == id);
+            var StudentAchievement = await _context.StudentsAchievements.FirstOrDefaultAsync(m => m.AchievementID == Achievement.ID);
+            StudentAchievement.FailMessage = FailMassage;
+            Achievement.Status = AchiveStatus.Rejected;
+            _context.Attach(Achievement).State = EntityState.Modified;
+            _context.Attach(StudentAchievement).State = EntityState.Modified;
             try
             {
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!SportAchievementExists(SportAchievement.ID))
+                if (!AchievementExists(Achievement.ID))
                 {
                     return NotFound();
                 }
@@ -62,7 +65,7 @@ namespace Course.Pages.Administrator.AdministratorPanelAction
             return RedirectToPage("/Administrator/AdministratorPanel");
         }
 
-        private bool SportAchievementExists(int id)
+        private bool AchievementExists(int id)
         {
             return (_context.Achievement?.Any(e => e.ID == id)).GetValueOrDefault();
         }
